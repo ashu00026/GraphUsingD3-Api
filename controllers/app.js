@@ -87,7 +87,7 @@ const filterByRegion=async(req,res)=>{
     for(let j=0;j<theSectors.length;j++){
         const presentSector=theSectors[j]
         // console.log(presentSector)
-        const theCountryRecords= await theRecordsWithRegion.filter((ele)=>(ele.sector==presentSector))
+        const theCountryRecords= theRecordsWithRegion.filter((ele)=>(ele.sector==presentSector))
             let count=0;
             let addedIntensity=0;
             let addedRelevence=0;
@@ -135,7 +135,70 @@ const filterByRegion=async(req,res)=>{
         dummy={}   
         }
         // console.log(data)
-        res.json(data)
+        let finalCountryIntensities=[]
+        let finalCountryRelevaces=[]
+        let finalCountryLiklihoods=[]
+        for(let i=0;i<theCountries.length;i++){
+            let intensities=[]
+            let relevances=[]
+            let liklihoods=[]
+            for(let j=0;j<theSectors.length;j++){
+                const theCountryNow=theCountries[i];
+                const theSectorNow=theSectors[j];
+                const theObject=data[theSectorNow]
+                const theArray=theObject[theCountryNow]
+                intensities.push(theArray[0])
+                relevances.push(theArray[1])
+                liklihoods.push(theArray[2])
+            }
+            finalCountryIntensities.push(intensities)
+            finalCountryRelevaces.push(intensities)
+            finalCountryLiklihoods.push(intensities)
+
+        }
+        console.log(finalCountryIntensities)
+        console.log(finalCountryLiklihoods)
+        console.log(finalCountryRelevaces)
+        // const finalSectors=Object.keys(data)
+        // const aSector=finalSectors[0];
+        // const finalIntensities=[]
+        // const finalRelevences=[]
+        // const finalLikelihoods=[]
+
+        // // console.log(aSector)
+        // // console.log(data[aSector])
+        // const resultToGet=data[aSector];
+        // const finalCountries=Object.keys(resultToGet)
+        // for(let i=0;i<finalSectors.length;i++){
+        //     const sectorNow=finalSectors[i]
+        //     console.log(sectorNow)
+        //     const theObject=data[sectorNow]
+        //     console.log(theObject)
+        //     const intensitiesShort=[]
+        //     const liklihoodsShort=[]
+        //     const relevencesShort=[]
+        //     for(let j=0;j<theCountries.length;j++){
+        //         const countryNow=theCountries[j];
+        //         const theArray=theObject[countryNow]
+        //         intensitiesShort.push(theArray[0])
+        //         relevencesShort.push(theArray[1])
+        //         liklihoodsShort.push(theArray[2])
+        //     }
+        //     finalIntensities.push(intensitiesShort)
+        //     finalRelevences.push(relevencesShort)
+        //     finalLikelihoods.push(liklihoodsShort)
+        // }
+
+        // console.log("sectors",finalSectors)
+        // console.log("countries",finalCountries)
+        // console.log("finalIntensities",finalIntensities)
+        // console.log("finalRelevences",finalRelevences)
+        // console.log("final liklihoods",finalLikelihoods)
+
+
+
+        // res.json({data,finalSectors,finalCountries,finalIntensities,finalRelevences,finalLikelihoods})
+        res.json({finalCountryRelevaces,finalCountryLiklihoods,finalCountryIntensities,data,theCountries,theSectors})
     }
 
 const filterBySector=async(req,res)=>{
