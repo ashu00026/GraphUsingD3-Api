@@ -152,8 +152,8 @@ const filterByRegion=async(req,res)=>{
                 liklihoods.push(theArray[2])
             }
             finalCountryIntensities.push(intensities)
-            finalCountryRelevaces.push(intensities)
-            finalCountryLiklihoods.push(intensities)
+            finalCountryRelevaces.push(relevances)
+            finalCountryLiklihoods.push(liklihoods)
 
         }
         console.log(finalCountryIntensities)
@@ -282,8 +282,38 @@ const filterBySector=async(req,res)=>{
         data[theCountry]=dummy
         // console.log(data)
     }
-    // console.log("data",data)
-    res.json(data)
+    let finalIntensities=[]
+    let finalRelevances=[]
+    let finalLikelihoods=[]
+    console.log("data",data)
+    // res.json(data)
+    for(let i=0;i<countries.length;i++){
+        let intensities=[]
+        let relevances=[]
+        let liklihoods=[]
+        for(let j=0;j<topics.length;j++){
+            const theCountry=countries[i]
+            const theTopic=topics[j]
+            const theObject=data[theCountry]
+            const theArray=theObject[theTopic]
+            intensities.push(theArray[0])
+            relevances.push(theArray[1])
+            liklihoods.push(theArray[2])
+        }
+        finalIntensities.push(intensities)
+        finalRelevances.push(relevances)
+        finalLikelihoods.push(liklihoods)
+    }
+    console.log("finalIntensities",finalIntensities)
+    console.log("finalLikelihoods",finalLikelihoods)
+    console.log("finalRelevances",finalRelevances)
+    console.log("topics",topics)
+    console.log("topics",countries)
+
+    res.json({finalIntensities,finalLikelihoods,finalRelevances,topics,countries,data})
+
+
+
 }
 
 module.exports={refreshProducts,demo,filterByRegion,filterBySector}
