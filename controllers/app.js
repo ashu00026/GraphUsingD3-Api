@@ -7,8 +7,10 @@ const refreshProducts=async (req,res)=>{
         const otherSectors={sector:''}
         const otherTopics={topic:''}
         const otherCountries={country:''}
+        const otherRegions={region:''}
         await theDatabase.deleteMany()
         await theDatabase.create(data)
+        await theDatabase.updateMany(otherRegions,{region:'others'})
         await theDatabase.updateMany(otherCountries,{country:'others'})
         await theDatabase.updateMany(otherSectors,{sector:'others'})
         await theDatabase.updateMany(otherTopics,{topic:'others'})
@@ -316,4 +318,22 @@ const filterBySector=async(req,res)=>{
 
 }
 
-module.exports={refreshProducts,demo,filterByRegion,filterBySector}
+const getAllRegions=async (req,res)=>{
+    try{
+        console.log("the way")
+        const theRecords=await theDatabase.find()
+        let theRegions=new Set([])
+        theRecords.forEach((record)=>{
+            const theRegion=record.region;
+            theRegions.add(theRegion)
+        })
+        console.log(theRegions)
+        const allRegions=[...theRegions]
+        res.json({allRegions})
+
+    }catch(e){
+        console.log(e)
+    }
+    
+}
+module.exports={refreshProducts,demo,filterByRegion,filterBySector,getAllRegions}
