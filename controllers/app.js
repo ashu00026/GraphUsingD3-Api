@@ -64,7 +64,7 @@ const demo=async(req,res)=>{
 }
 
 const filterByRegion=async(req,res)=>{
-    const {region}=req.query
+    const {region}=req.body
     const countries=new Set([])
     const sectors=new Set([])
     let countryData=[]
@@ -204,7 +204,7 @@ const filterByRegion=async(req,res)=>{
     }
 
 const filterBySector=async(req,res)=>{
-    const {region,sector}=req.query
+    const {region,sector}=req.body
     // console.log(sector)
     let addedLikelihood=0;
     let addedRelevence=0;
