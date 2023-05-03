@@ -32,9 +32,7 @@ const start = async () => {
   try {
     // connectDB
 
-    await connectDB(
-      "mongodb+srv://ashutosh:Ashu5656@nodeexpressprojets.nuuengz.mongodb.net/Task?retryWrites=true&w=majority"
-    );
+    await connectDB(process.env.URI);
     app.listen(port, () => console.log(`Server is listening port ${port}...`));
   } catch (error) {
     console.log(error);
