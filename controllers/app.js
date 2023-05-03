@@ -203,7 +203,7 @@ const filterByRegion = async (req, res) => {
   // console.log("final liklihoods",finalLikelihoods)
 
   // res.json({data,finalSectors,finalCountries,finalIntensities,finalRelevences,finalLikelihoods})
-  res.json({
+  res.status(200).json({
     finalCountryRelevaces,
     finalCountryLiklihoods,
     finalCountryIntensities,
@@ -331,16 +331,14 @@ const filterBySector = async (req, res) => {
   // console.log("topics",topics)
   // console.log("countries",countries)
 
-  res
-    .status(200)
-    .json({
-      finalIntensities,
-      finalLikelihoods,
-      finalRelevances,
-      topics,
-      countries,
-      data,
-    });
+  res.status(200).json({
+    finalIntensities,
+    finalLikelihoods,
+    finalRelevances,
+    topics,
+    countries,
+    data,
+  });
 };
 
 const getAllRegions = async (req, res) => {
@@ -356,7 +354,7 @@ const getAllRegions = async (req, res) => {
     });
     // console.log(theRegions)
     const allRegions = [...theRegions];
-    res.json({ allRegions });
+    res.status(200).json({ allRegions });
   } catch (e) {
     console.log(e);
   }
