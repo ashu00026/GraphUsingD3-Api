@@ -3,13 +3,15 @@ const data=require('../jsondata')
 
 const refreshProducts=async (req,res)=>{
     try{
-        console.log('here')
+        // console.log('here')
         const otherSectors={sector:''}
         const otherTopics={topic:''}
         const otherCountries={country:''}
         const otherRegions={region:''}
         await theDatabase.deleteMany()
         await theDatabase.create(data)
+        await theDatabase.updateMany({sector:'Aerospace & defence'},{sector:'Aerospace And defence'})
+        await theDatabase.updateMany({sector:'Food & agriculture'},{sector:'Food And agriculture'})
         await theDatabase.updateMany(otherRegions,{region:'others'})
         await theDatabase.updateMany(otherCountries,{country:'others'})
         await theDatabase.updateMany(otherSectors,{sector:'others'})
@@ -52,9 +54,9 @@ const demo=async(req,res)=>{
 
         }
         // console.log('wait')
-        console.log(queryParameters)
+        // console.log(queryParameters)
         const records=await theDatabase.find(queryParameters)
-        console.log(records)
+        // console.log(records)
         res.json({data:records})
 
     }catch(e){
@@ -64,6 +66,8 @@ const demo=async(req,res)=>{
 }
 
 const filterByRegion=async(req,res)=>{
+    // console.log("header ---------",req.headers)
+
     const {region}=req.body
     const countries=new Set([])
     const sectors=new Set([])
@@ -158,9 +162,9 @@ const filterByRegion=async(req,res)=>{
             finalCountryLiklihoods.push(liklihoods)
 
         }
-        console.log(finalCountryIntensities)
-        console.log(finalCountryLiklihoods)
-        console.log(finalCountryRelevaces)
+        // console.log(finalCountryIntensities)
+        // console.log(finalCountryLiklihoods)
+        // console.log(finalCountryRelevaces)
         // const finalSectors=Object.keys(data)
         // const aSector=finalSectors[0];
         // const finalIntensities=[]
@@ -204,7 +208,21 @@ const filterByRegion=async(req,res)=>{
     }
 
 const filterBySector=async(req,res)=>{
-    const {region,sector}=req.body
+    // console.log("header ---------",req.headers)
+    let {region,sector}=req.body
+        const operatorMap = {
+          '&': 'And',
+        };
+        const regEx = /\b(&)\b/g;
+        sector = sector.replace(
+          regEx,
+          (match) => `${operatorMap[match]}`
+        );
+
+
+
+    // console.log(sector)
+    // console.log(region)
     // console.log(sector)
     let addedLikelihood=0;
     let addedRelevence=0;
@@ -287,7 +305,7 @@ const filterBySector=async(req,res)=>{
     let finalIntensities=[]
     let finalRelevances=[]
     let finalLikelihoods=[]
-    console.log("data",data)
+    // console.log("data",data)
     // res.json(data)
     for(let i=0;i<countries.length;i++){
         let intensities=[]
@@ -306,13 +324,13 @@ const filterBySector=async(req,res)=>{
         finalRelevances.push(relevances)
         finalLikelihoods.push(liklihoods)
     }
-    console.log("finalIntensities",finalIntensities)
-    console.log("finalLikelihoods",finalLikelihoods)
-    console.log("finalRelevances",finalRelevances)
-    console.log("topics",topics)
-    console.log("topics",countries)
+    // console.log("finalIntensities",finalIntensities)
+    // console.log("finalLikelihoods",finalLikelihoods)
+    // console.log("finalRelevances",finalRelevances)
+    // console.log("topics",topics)
+    // console.log("countries",countries)
 
-    res.json({finalIntensities,finalLikelihoods,finalRelevances,topics,countries,data})
+    res.status(200).json({finalIntensities,finalLikelihoods,finalRelevances,topics,countries,data})
 
 
 
@@ -320,14 +338,15 @@ const filterBySector=async(req,res)=>{
 
 const getAllRegions=async (req,res)=>{
     try{
-        console.log("the way")
+        // console.log(req.headers)
+        // console.log("the way")
         const theRecords=await theDatabase.find()
         let theRegions=new Set([])
         theRecords.forEach((record)=>{
             const theRegion=record.region;
             theRegions.add(theRegion)
         })
-        console.log(theRegions)
+        // console.log(theRegions)
         const allRegions=[...theRegions]
         res.json({allRegions})
 
